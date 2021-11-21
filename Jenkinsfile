@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                             sh """
-                              export CANARY_REPLICAS=${DOCKER_IMAGE_NAME}
+                              export CANARY_REPLICAS=${CANARY_REPLICAS}
                               export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
                               export BUILD_NUMBER=${env.BUILD_NUMBER}
                               
@@ -75,7 +75,7 @@ pipeline {
                 milestone(1)
                 script {
                             sh """
-                              export CANARY_REPLICAS=${DOCKER_IMAGE_NAME}
+                              export CANARY_REPLICAS=${CANARY_REPLICAS}
                               export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
                               export BUILD_NUMBER=${env.BUILD_NUMBER}
                               
@@ -89,7 +89,7 @@ pipeline {
              
                 script {
                             sh """
-                              export CANARY_REPLICAS=${DOCKER_IMAGE_NAME}
+                              export CANARY_REPLICAS=${CANARY_REPLICAS}
                               export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
                               export BUILD_NUMBER=${env.BUILD_NUMBER}
                               
