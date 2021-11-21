@@ -7,6 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'printenv'
                 echo 'Running build automation'
                 sh './gradlew build --no-daemon'
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
@@ -49,6 +50,10 @@ pipeline {
             steps {
                 script {
                             sh """
+                              export CANARY_REPLICAS=${DOCKER_IMAGE_NAME}
+                              export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
+                              export BUILD_NUMBER=${env.BUILD_NUMBER}
+                              
                               gcloud auth activate-service-account --key-file=/home/edureka/Downloads/ingka-cff-slm-dev-923c78677045.json --project=ingka-cff-slm-dev
                               gcloud container clusters get-credentials slm-cluster --zone europe-west4-a --project ingka-cff-slm-dev
 
