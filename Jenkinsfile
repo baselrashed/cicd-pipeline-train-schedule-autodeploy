@@ -54,10 +54,14 @@ pipeline {
                               export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
                               export BUILD_NUMBER=${env.BUILD_NUMBER}
                               
+                              envsubst < train-schedule-kube-canary.yml > train-schedule-kube-canary-upd.yml
+                              
+                              cat train-schedule-kube-canary-upd.yml
+                              
                               gcloud auth activate-service-account --key-file=/home/edureka/Downloads/ingka-cff-slm-dev-923c78677045.json --project=ingka-cff-slm-dev
                               gcloud container clusters get-credentials slm-cluster --zone europe-west4-a --project ingka-cff-slm-dev
 
-                              kubectl apply -f train-schedule-kube-canary.yml
+                              kubectl apply -f train-schedule-kube-canary-upd.yml
 
                               """
                 }      
@@ -65,7 +69,7 @@ pipeline {
         }
         stage('DeployToProduction') {
             when {
-                branch 'master'
+                expression { return env.GIT_BRANCH == "origin/master" }
             }
             environment { 
                 CANARY_REPLICAS = 0
@@ -78,11 +82,15 @@ pipeline {
                               export CANARY_REPLICAS=${CANARY_REPLICAS}
                               export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
                               export BUILD_NUMBER=${env.BUILD_NUMBER}
+
+                              envsubst < train-schedule-kube-canary.yml > train-schedule-kube-canary-upd.yml
+                              
+                              cat train-schedule-kube-canary-upd.yml
                               
                               gcloud auth activate-service-account --key-file=/home/edureka/Downloads/ingka-cff-slm-dev-923c78677045.json --project=ingka-cff-slm-dev
                               gcloud container clusters get-credentials slm-cluster --zone europe-west4-a --project ingka-cff-slm-dev
 
-                              kubectl apply -f train-schedule-kube-canary.yml
+                              kubectl apply -f train-schedule-kube-canary-upd.yml
 
                               """
                 }
@@ -92,11 +100,15 @@ pipeline {
                               export CANARY_REPLICAS=${CANARY_REPLICAS}
                               export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME}
                               export BUILD_NUMBER=${env.BUILD_NUMBER}
+
+                              envsubst < train-schedule-kube.yml > train-schedule-kube-upd.yml
+                              
+                              cat train-schedule-kube-upd.yml
                               
                               gcloud auth activate-service-account --key-file=/home/edureka/Downloads/ingka-cff-slm-dev-923c78677045.json --project=ingka-cff-slm-dev
                               gcloud container clusters get-credentials slm-cluster --zone europe-west4-a --project ingka-cff-slm-dev
 
-                              kubectl apply -f train-schedule-kube.yml
+                              kubectl apply -f train-schedule-kube-upd.yml
 
                               """
                 }                   
